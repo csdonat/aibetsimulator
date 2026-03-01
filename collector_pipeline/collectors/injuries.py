@@ -7,9 +7,10 @@ log = get_logger("INJURIES")
 
 def collect_injuries(league_id: int, season: int, out_dir: Path):
     """
-    Collect all injury reports for the season.
+    Collect current injury reports for the season.
+    Always fetches latest state and overwrites (injuries change daily).
     """
-    log.info(f"🚀 Collecting injuries for league={league_id}, season={season}")
+    log.info(f"🚀 Collecting current injuries for league={league_id}, season={season}")
 
     data = api_get("injuries", {
         "league": league_id,
