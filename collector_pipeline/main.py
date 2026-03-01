@@ -27,11 +27,14 @@ def main():
     parser = argparse.ArgumentParser(description="Collector Pipeline")
     parser.add_argument("--season", type=int, required=True, help="Season year, e.g. 2022")
     parser.add_argument("--league", type=int, default=39, help="League ID (default 39 = Premier League)")
+    parser.add_argument("--date", type=str, help="Specific date to collect (YYYY-MM-DD). If not provided, collects full season.")
 
     args = parser.parse_args()
 
     output_dir = get_data_dir(args.league, args.season)
     log.info(f"Saving dataset to: {output_dir}")
+    if args.date:
+        log.info(f"Date filter: {args.date}")
 
     # --- Collectors with timing---
     # --- Standings ---
@@ -43,7 +46,7 @@ def main():
     # --- Fixtures ---
     fixtures = timed(
         "Fixtures", 
-        collect_fixtures, args.season, args.league, output_dir
+        collect_fixtures, args.season, args.league, output_dir, args.date
     )
 
     timed("Fixture Stats", collect_fixture_stats, fixtures, output_dir)
