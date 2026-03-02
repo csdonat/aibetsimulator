@@ -55,5 +55,4 @@ def collect_fixture_stats(fixtures, out_dir: Path):
         else:
             print(f"\r📥 Progress: {idx}/{total} ({idx*100//total}%) - ⚠️ Failed: {home_team} vs {away_team}", end="", flush=True)
 
-    print()  # New line after progress
     log.info(f"✔ Fixture stats collection completed: {total} fixtures processed")

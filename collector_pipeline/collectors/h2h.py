@@ -52,5 +52,4 @@ def collect_h2h(fixtures, out_dir: Path):
         else:
             print(f"\r📥 Progress: {idx}/{total} ({idx*100//total}%) - ⚠️ Failed: {pair[0]} vs {pair[1]}", end="", flush=True)
     
-    print()  # New line after progress
     log.info(f"✔ H2H collection completed: {total} pairs saved")

@@ -35,5 +35,4 @@ def collect_players(teams, season: int, out_dir: Path):
         
         print(f"\r📥 Progress: {idx}/{total} ({idx*100//total}%) - ✔ Latest: {team_name}", end="", flush=True)
 
-    print()  # New line after progress
     log.info(f"✔ Players collection completed: {total} teams processed")

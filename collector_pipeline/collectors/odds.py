@@ -63,5 +63,4 @@ def fetch_odds(fixtures, out_dir: Path):
             failed += 1
             print(f"\r📥 Progress: {idx}/{total} ({idx*100//total}%) - ⚠️ Failed: fixture {fixture_id} ({fixture_date.date()}) [{status}]", end="", flush=True)
     
-    print()  # New line after progress
     log.info(f"✔ Odds collection completed: {updated} updated, {failed} failed")

@@ -41,9 +41,7 @@ def fetch_lineups(fixtures, out_dir: Path):
         else:
             print(f"\r📥 Progress: {idx}/{total} ({idx*100//total}%) - ⚠️ Failed: fixture {fixture_id}", end="", flush=True)
     
-    print()  # New line after progress
-    
     if total - skipped == 0:
-        log.info(f"ℹ️ All {total} lineups already exist, nothing new to fetch")
+        log.info(f"ℹ️  All {total} lineups already exist, nothing new to fetch")
     else:
         log.info(f"✔ Lineups collection completed: {total - skipped} fetched, {skipped} skipped")

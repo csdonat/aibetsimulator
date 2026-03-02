@@ -68,16 +68,19 @@ FAILURE_COUNT=0
 for league in "${LEAGUES[@]}"; do
   echo "--- Processing League $league ---" | tee -a "$LOG_FILE"
   
-  if "$PY" "$SCRIPT_DIR/main.py" \
+  "$PY" "$SCRIPT_DIR/main.py" \
     --league "$league" \
     --season "$SEASON" \
-    --date "$DATE" 2>&1 | tee -a "$LOG_FILE"; then
-    
+    --date "$DATE" 2>&1 | tee -a "$LOG_FILE"
+
+  EXIT_CODE=${PIPESTATUS[0]}
+
+  if [ "$EXIT_CODE" -eq 0 ]; then
     echo "✅ League $league completed" | tee -a "$LOG_FILE"
-    ((SUCCESS_COUNT++))
+    SUCCESS_COUNT=$((SUCCESS_COUNT + 1))  
   else
     echo "❌ League $league failed" | tee -a "$LOG_FILE"
-    ((FAILURE_COUNT++))
+    FAILURE_COUNT=$((FAILURE_COUNT + 1))
   fi
   
   echo "" | tee -a "$LOG_FILE"

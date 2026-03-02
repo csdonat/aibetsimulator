@@ -39,5 +39,4 @@ def collect_last_matches(teams, out_dir: Path, last: int = 10):
 
         print(f"\r📥 Progress: {idx}/{total} ({idx*100//total}%) - ✔ Latest: {team_name}", end="", flush=True)
     
-    print()  # New line after progress
     log.info(f"✔ Collection completed: {total - skipped} fetched, {skipped} skipped")
