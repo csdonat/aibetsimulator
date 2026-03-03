@@ -14,7 +14,7 @@ LEAGUE_ID = 39        # Premier League
 # SEASON = 2025         # You will make this dynamic later
 
 # Output directory for collected data
-DATA_DIR = Path("data")
+DATA_DIR = Path("../data")
 
 def get_data_dir(league_id: int, season: int) -> Path:
     """

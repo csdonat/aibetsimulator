@@ -8,5 +8,5 @@ services:
       - "8501:8501"
     volumes:
       - ./display_app:/app/display_app
-      - ./collector_pipeline/data:/app/collector_pipeline/data
+      - ./data:/app/data
     restart: unless-stopped

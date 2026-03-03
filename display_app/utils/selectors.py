@@ -1,7 +1,7 @@
 from pathlib import Path
 import streamlit as st
 
-BASE_DATA_DIR = Path("../collector_pipeline/data")
+BASE_DATA_DIR = Path("../data")
 
 LEAGUE_MAP = {
     2: "UEFA Champions League",
