@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  streamlit:
+    build: .
+    container_name: betwai-streamlit
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./display_app:/app/display_app
+      - ./collector_pipeline/data:/app/collector_pipeline/data
+    restart: unless-stopped

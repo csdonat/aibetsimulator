@@ -49,6 +49,9 @@ league_id, season, data_dir = select_league_season()
 st.write(f"### {LEAGUE_MAP.get(league_id)} — Season {season}")
 
 fixtures_data = load_json(data_dir / "fixtures.json")
+if len(fixtures_data.get("response", [])) == 0:
+    st.warning("No fixtures found for this league/season.")
+    st.stop()
 if not fixtures_data:
     st.error("No fixtures.json found for this league/season.")
     st.stop()

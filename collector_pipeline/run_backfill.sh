@@ -5,7 +5,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PY="${PY:-python3}"
 
-LEAGUES=(39 140 2)
+LEAGUES=(2)
 SEASON=2025
 
 FROM_DATE=""
