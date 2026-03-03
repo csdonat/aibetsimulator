@@ -10,10 +10,10 @@ cd display_app
 streamlit run main.py
 ```
 
-### On VPS using docker
+### Easyest using docker-compose
 ```bash
-docker build -t betwai-streamlit .
-docker run -d --name betwai-streamlit --restart=always -p 8501:8501 betwai-streamlit
+docker compose up -d
+docker compose down
 ```
 
 ## Collector Pipeline
