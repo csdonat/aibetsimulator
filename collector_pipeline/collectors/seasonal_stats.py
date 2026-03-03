@@ -29,5 +29,4 @@ def fetch_seasonal_stats(teams, league_id: int, season: int, out_dir: Path):
         
         print(f"\r📥 Progress: {idx}/{total} ({idx*100//total}%) - ✔ Latest: {team_name}", end="", flush=True)
 
-    print()  # New line after progress
     log.info(f"✔ Seasonal stats collection completed: {total} teams processed")

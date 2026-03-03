@@ -7,9 +7,10 @@ log = get_logger("STANDINGS")
 
 def fetch_standings(season: int, league_id: int, out_dir: Path):
     """
-    Download all standings of a league+season.
+    Download current standings of a league+season.
+    Always fetches latest state and overwrites (standings change after each match).
     """
-    log.info(f"🚀 Collecting standings for season={season} league={league_id}...")
+    log.info(f"🚀 Collecting current standings for season={season} league={league_id}...")
 
     data = api_get(
         "standings",
