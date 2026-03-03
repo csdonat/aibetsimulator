@@ -25,6 +25,20 @@ cd collector_pipeline
 python main.py --league 39 --season 2025
 ```
 
+### Automated full season Collection
+Collect all data for all seasons
+```bash
+cd collector_pipeline
+./run_pipeline.sh
+```
+
+### Backfill / Recovery run
+Collect all data between now and a desired date.
+```bash
+cd collector_pipeline
+./run_backfill.sh --from 2026-02-28
+```
+
 ### Daily Collection (for a specific date)
 Collect data for a specific date and merge with existing:
 ```bash
