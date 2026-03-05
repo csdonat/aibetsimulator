@@ -9,6 +9,7 @@ LEAGUES=(2)
 SEASON=2025
 
 FROM_DATE=""
+TO_DATE=""
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -16,8 +17,12 @@ while [[ $# -gt 0 ]]; do
       FROM_DATE="$2"
       shift 2
       ;;
+    --to)
+      TO_DATE="$2"
+      shift 2
+      ;;
     *)
-      echo "Usage: $0 --from YYYY-MM-DD"
+      echo "Usage: $0 --from YYYY-MM-DD [--to YYYY-MM-DD]"
       exit 1
       ;;
   esac
@@ -28,40 +33,32 @@ if [ -z "$FROM_DATE" ]; then
   exit 1
 fi
 
-TODAY=$(date +%Y-%m-%d)
+# If --to is not provided, default to today
+if [ -z "$TO_DATE" ]; then
+  TO_DATE=$(date +%Y-%m-%d)
+fi
 
 mkdir -p "$SCRIPT_DIR/logs"
 LOG_FILE="$SCRIPT_DIR/logs/backfill_$(date +%Y%m%d_%H%M%S).log"
 
 echo "============================================================" | tee -a "$LOG_FILE"
-echo "🚀 MANUAL BACKFILL STARTED at $(date)" | tee -a "$LOG_FILE"
+echo "🚀 BACKFILL STARTED at $(date)" | tee -a "$LOG_FILE"
 echo "   From:  $FROM_DATE" | tee -a "$LOG_FILE"
-echo "   Until: $TODAY" | tee -a "$LOG_FILE"
+echo "   To:    $TO_DATE" | tee -a "$LOG_FILE"
 echo "   Leagues: ${LEAGUES[*]}" | tee -a "$LOG_FILE"
 echo "============================================================" | tee -a "$LOG_FILE"
 echo "" | tee -a "$LOG_FILE"
 
-CURRENT="$FROM_DATE"
+for league in "${LEAGUES[@]}"; do
+  echo "================ League $league ================" | tee -a "$LOG_FILE"
 
-while [[ "$CURRENT" < "$TODAY" || "$CURRENT" == "$TODAY" ]]; do
-  echo "================ DATE: $CURRENT ================" | tee -a "$LOG_FILE"
+  "$PY" "$SCRIPT_DIR/main.py" \
+    --league "$league" \
+    --season "$SEASON" \
+    --from "$FROM_DATE" \
+    --to "$TO_DATE" 2>&1 | tee -a "$LOG_FILE"
 
-  for league in "${LEAGUES[@]}"; do
-    echo "--- League $league ($CURRENT) ---" | tee -a "$LOG_FILE"
-
-    "$PY" "$SCRIPT_DIR/main.py" \
-      --league "$league" \
-      --season "$SEASON" \
-      --date "$CURRENT" 2>&1 | tee -a "$LOG_FILE"
-
-    echo "" | tee -a "$LOG_FILE"
-  done
-
-  if date --version >/dev/null 2>&1; then
-    CURRENT=$(date -d "$CURRENT + 1 day" +%Y-%m-%d)
-  else
-    CURRENT=$(date -j -f "%Y-%m-%d" "$CURRENT" "+%Y-%m-%d" -v+1d)
-  fi
+  echo "" | tee -a "$LOG_FILE"
 done
 
 echo "============================================================" | tee -a "$LOG_FILE"
