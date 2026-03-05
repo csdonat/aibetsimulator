@@ -5,25 +5,37 @@ from utils.logger import get_logger
 
 log = get_logger("FIXTURES")
 
-def collect_fixtures(season: int, league_id: int, out_dir: Path, date: str = None):
+def collect_fixtures(season: int, league_id: int, out_dir: Path, date: str = None, from_date: str = None, to_date: str = None):
     """
-    Download all fixtures of a league+season, or for a specific date.
+    Download all fixtures of a league+season, or for a specific date/date range.
     If date is provided (YYYY-MM-DD), fetches only that date and merges with existing.
-    If date is None, fetches full season and overwrites.
+    If from_date and to_date are provided, fetches date range and merges with existing.
+    If none provided, fetches full season and overwrites.
     """
-    if date:
+    if from_date and to_date:
+        log.info(f"🚀 Collecting fixtures from {from_date} to {to_date} league={league_id} season={season}...")
+        params = {
+            "from": from_date,
+            "to": to_date,
+            "league": league_id,
+            "season": season
+        }
+        merge_mode = True
+    elif date:
         log.info(f"🚀 Collecting fixtures for date={date} league={league_id} season={season}...")
         params = {
             "date": date,
             "league": league_id,
             "season": season
         }
+        merge_mode = True
     else:
         log.info(f"🚀 Collecting fixtures for season={season} league={league_id}...")
         params = {
             "league": league_id,
             "season": season
         }
+        merge_mode = False
 
     data = api_get("fixtures", params)
 
@@ -34,9 +46,10 @@ def collect_fixtures(season: int, league_id: int, out_dir: Path, date: str = Non
     new_fixtures = data.get("response", [])
     out_file = out_dir / "fixtures.json"
 
-    # If date filter: merge with existing fixtures
-    if date and out_file.exists():
-        log.info(f"📥 Found {len(new_fixtures)} fixtures for {date}, merging with existing...")
+    # If date/range filter: merge with existing fixtures
+    if merge_mode and out_file.exists():
+        date_info = f"{from_date} to {to_date}" if from_date and to_date else date
+        log.info(f"📥 Found {len(new_fixtures)} fixtures for {date_info}, merging with existing...")
         try:
             with out_file.open("r", encoding="utf-8") as f:
                 existing_data = json.load(f)
@@ -76,4 +89,4 @@ def collect_fixtures(season: int, league_id: int, out_dir: Path, date: str = Non
         json.dump(data, f, indent=2)
 
     log.info(f"✔ Saved fixtures → {out_file}")
-    return new_fixtures if date else data.get("response", [])
+    return new_fixtures if merge_mode else data.get("response", [])

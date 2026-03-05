@@ -33,10 +33,24 @@ cd collector_pipeline
 ```
 
 ### Backfill / Recovery run
-Collect all data between now and a desired date.
+Collect all data for a date range with a single API call (much more efficient than daily iteration).
+
+**Option 1:** Specify both start and end dates:
+```bash
+cd collector_pipeline
+./run_backfill.sh --from 2026-02-28 --to 2026-03-05
+```
+
+**Option 2:** Specify only start date (defaults to today):
 ```bash
 cd collector_pipeline
 ./run_backfill.sh --from 2026-02-28
+```
+
+You can also use the date range directly with main.py:
+```bash
+cd collector_pipeline
+python main.py --league 39 --season 2025 --from 2026-02-28 --to 2026-03-05
 ```
 
 ### Daily Collection (for a specific date)

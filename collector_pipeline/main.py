@@ -28,12 +28,16 @@ def main():
     parser.add_argument("--season", type=int, required=True, help="Season year, e.g. 2022")
     parser.add_argument("--league", type=int, default=39, help="League ID (default 39 = Premier League)")
     parser.add_argument("--date", type=str, help="Specific date to collect (YYYY-MM-DD). If not provided, collects full season.")
+    parser.add_argument("--from", type=str, dest="from_date", help="Start date for date range (YYYY-MM-DD)")
+    parser.add_argument("--to", type=str, dest="to_date", help="End date for date range (YYYY-MM-DD)")
 
     args = parser.parse_args()
 
     output_dir = get_data_dir(args.league, args.season)
     log.info(f"Saving dataset to: {output_dir}")
-    if args.date:
+    if args.from_date and args.to_date:
+        log.info(f"Date range filter: {args.from_date} to {args.to_date}")
+    elif args.date:
         log.info(f"Date filter: {args.date}")
 
     # --- Collectors with timing---
@@ -46,7 +50,7 @@ def main():
     # --- Fixtures ---
     fixtures = timed(
         "Fixtures", 
-        collect_fixtures, args.season, args.league, output_dir, args.date
+        collect_fixtures, args.season, args.league, output_dir, args.date, args.from_date, args.to_date
     )
 
     timed("Fixture Stats", collect_fixture_stats, fixtures, output_dir)
